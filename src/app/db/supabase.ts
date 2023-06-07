@@ -73,5 +73,3 @@ export interface Database {
     }
   }
 }
-
-export type Employee = Database['public']['Tables']['employees']['Row'];

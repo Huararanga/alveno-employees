@@ -6,23 +6,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Employee } from "./supabase";
+import { EmployeeWithTeam } from "./types";
 import moment from "moment";
 
 export type EmployeesTableProps = {
-  rows: Employee[];
+  rows: EmployeeWithTeam[];
 };
 
 export default function EmployeesTable({ rows }: EmployeesTableProps) {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: '70vh',
+        width: 'auto',
+      }}
+    >
+      <Table size="small" stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Surname</TableCell>
-            <TableCell>Start date</TableCell>
-            <TableCell>End date</TableCell>
+            <TableCell width="15%">Start date</TableCell>
+            <TableCell width="15%">End date</TableCell>
+            <TableCell width="15%">Team</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -33,17 +40,22 @@ export default function EmployeesTable({ rows }: EmployeesTableProps) {
             return (
               <TableRow
                 key={row.id}
-                sx={{
-                //   "&:last-child td, &:last-child th": { border: 0 },
-                  backgroundColor: isNoMoreWorking ? 'secondary.main' : undefined,
+                sx={(theme) => {
+                  return {
+                    backgroundColor: isNoMoreWorking
+                      ? theme.palette.grey[100]
+                      : undefined,
+                    textDecoration: isNoMoreWorking
+                    ? 'line-through'
+                    : undefined,
+                  };
                 }}
               >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
+                <TableCell>{row.name}</TableCell>
                 <TableCell>{row.surname}</TableCell>
                 <TableCell>{row.startDate}</TableCell>
-                <TableCell>{row.endDate ? row.endDate : ''}</TableCell>
+                <TableCell>{row.endDate ? row.endDate : ""}</TableCell>
+                <TableCell>{row.teamName ? row.teamName : ""}</TableCell>
               </TableRow>
             );
           })}

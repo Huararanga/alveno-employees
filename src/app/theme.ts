@@ -1,19 +1,32 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
+import { tableCellClasses } from "@mui/material/TableCell";
 
 export const theme = createTheme({
-//   overrides: {
-//     MuiTableCell: {
-//       head: {
-//         color: "grey",
-//       }
-//     }
-//   },
+  //   overrides: {
+  //     MuiTableCell: {
+  //       head: {
+  //         color: "grey",
+  //       }
+  //     }
+  //   },
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.light,
+            color: theme.palette.common.white,
+          },
+        }),
+      },
+    },
+  },
   palette: {
     primary: {
-        main: '#02D076',
+      main: "#02D076",
     },
     secondary: {
-        main: '#10BFFC',
-    }
+      main: "#10BFFC",
+    },
   },
 });

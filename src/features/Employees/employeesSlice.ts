@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { getEmployeesAPI } from './employeesAPI';
-import { Employee } from './supabase';
+import { Employee, EmployeeWithTeam } from './types';
 
 export interface EmployeesState {
   data: Employee[];
@@ -16,9 +16,7 @@ const initialState: EmployeesState = {
 export const getEmployees = createAsyncThunk(
   'employees/getEmployees',
   async () => {
-    const response = await getEmployeesAPI();
-    // The value we return becomes the `fulfilled` action payload
-    return response;
+    return await getEmployeesAPI();
   }
 );
 
@@ -26,15 +24,6 @@ export const employeesSlice = createSlice({
   name: 'employees',
   initialState,
   reducers: {
-    // increment: (state) => {
-    //   state.value += 1;
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1;
-    // },
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload;
-    // },
   },
   extraReducers: (builder) => {
     builder
@@ -43,7 +32,6 @@ export const employeesSlice = createSlice({
       })
       .addCase(getEmployees.fulfilled, (state, action) => {
         state.status = 'idle';
-        console.log(action)
         state.data = action.payload;
       })
       .addCase(getEmployees.rejected, (state) => {
@@ -52,17 +40,15 @@ export const employeesSlice = createSlice({
   },
 });
 
-// export const { increment, decrement, incrementByAmount } = employeesSlice.actions;
-
 export const selectEmployees = (state: RootState) => state.employees.data;
-
-// export const incrementIfOdd =
-//   (amount: number): AppThunk =>
-//   (dispatch, getState) => {
-//     const currentValue = selectCount(getState());
-//     if (currentValue % 2 === 1) {
-//       dispatch(incrementByAmount(amount));
-//     }
-//   };
+export const selectEmployeesWithTeam = (state: RootState): EmployeeWithTeam[] => {
+  const teamsById = state.teams.dataById;
+  return state.employees.data.map((employee) => {
+    return {
+      ...employee,
+      teamName: employee.team ? teamsById[employee.team].name : null,
+    }   
+  })
+};
 
 export default employeesSlice.reducer;
