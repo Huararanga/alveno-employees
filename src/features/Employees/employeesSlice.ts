@@ -31,8 +31,11 @@ export const getEmployees = createAsyncThunk(
 
 export const addEmployee = createAsyncThunk(
   "employees/addEmployee",
-  async (input: InsertEmployee, payloadCreator) => {
-    return await addEmployeeAPI(input);
+  async (input: InsertEmployee, { dispatch }) => {
+    await addEmployeeAPI(input);
+    // addEmployee request does not return `id`, `createdAt`, so we cannot add row just on frontend
+    // we need to refresh whole list to add newly created item to frondend state
+    return dispatch(getEmployees());
   }
 );
 
@@ -55,8 +58,7 @@ export const employeesSlice = createSlice({
       })
       .addCase(getEmployees.fulfilled, (state, action) => {
         state.status = "idle";
-        state.data = action.payload;
-        console.log(action)
+        state.data = [...action.payload].reverse();
       })
       .addCase(getEmployees.rejected, (state) => {
         state.status = "failed";
@@ -66,7 +68,6 @@ export const employeesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(addEmployee.fulfilled, (state) => {
-        // addEmployee request does not return `id`, `createdAt`, so we cannot create new row directly here
         state.status = "idle";
       })
       .addCase(addEmployee.rejected, (state) => {
@@ -77,10 +78,13 @@ export const employeesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(updateEmployee.fulfilled, (state, payload) => {
+        // row is updated on backend, we have everything to safely update state
         const change = payload.meta.arg;
         const changeId = change.id;
-        state.data = state.data.map((row) => {
-          return row.id === changeId ? { ...row, ...change} : row
+        state.data.forEach((row, index) => {
+          if (row.id === changeId) {
+            state.data[index] = { ...row, ...change };
+          }
         });
         state.status = "idle";
       })

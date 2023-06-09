@@ -1,22 +1,20 @@
 import React from "react";
-import logo from "./logo.svg";
 import Employees from "./features/Employees/Employees";
-import "./App.css";
-import { Divider, ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { theme } from "./app/theme";
+import AppBar from "./features/AppBar/AppBar";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterMoment}>
-        <div className="App">
-          <img src={logo} className="App-logo" alt="logo" />
-          <Divider variant="middle" sx={{ margin: "1rem" }} />
-          <div className="Content">
+        <div>
+          <AppBar />
+          <Box margin="2rem">
             <Employees />
-          </div>
+          </Box>
         </div>
       </LocalizationProvider>
     </ThemeProvider>

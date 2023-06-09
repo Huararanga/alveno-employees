@@ -14,7 +14,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           [`&.${tableCellClasses.head}`]: {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: theme.palette.primary.main,
             color: theme.palette.common.white,
           },
         }),

@@ -25,23 +25,21 @@ export default function Employees() {
   }, [dispatch]);
 
   const handleAddEmployee = useCallback((values: EmployeeFormValues) => {
-    return dispatch(addEmployee(addEmployeeFormApiAdaptor(values))).then(() =>
-      // addEmployee request does not return `id`, `createdAt`, so we cannot add row just on frontend
-      // we need to refresh whole list to add newly created item to frondend state
-      // maybe is better to put refresh to addEmployee thunk
-      dispatch(getEmployees())
-    );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return dispatch(addEmployee(addEmployeeFormApiAdaptor(values)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Stack direction="column" spacing="1rem">
       <Stack direction="row" spacing="1rem" alignItems="center">
         <PersonIcon />
-        <Typography fontSize={20}>Employee</Typography>
+        <Typography fontSize={20}>Employees</Typography>
       </Stack>
       <Stack direction="row" spacing="1rem" alignItems="center">
-        <AddEmployeeForm processFormOutput={handleAddEmployee} />
+        <AddEmployeeForm
+          variant="outlined"
+          processFormOutput={handleAddEmployee}
+        />
         <Button variant="outlined" onClick={() => dispatch(getEmployees())}>
           Refresh
         </Button>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, memo } from "react";
 import moment from "moment";
 import { TableCell, IconButton, TableRow } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,7 +13,7 @@ export type EmployeesRowProps = {
   row: EmployeeWithTeam;
 };
 
-export default function EmployeesRow({ row }: EmployeesRowProps) {
+function EmployeesRow({ row }: EmployeesRowProps) {
   const { id, name, surname, startDate, endDate, team, teamName } = row;
 
   const dispatch = useAppDispatch();
@@ -72,3 +72,5 @@ export default function EmployeesRow({ row }: EmployeesRowProps) {
     </TableRow>
   );
 }
+
+export default memo(EmployeesRow);

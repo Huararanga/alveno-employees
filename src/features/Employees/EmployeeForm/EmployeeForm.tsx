@@ -55,7 +55,7 @@ function EmployeeForm({
   const formik = useFormik({
     initialValues: {
       id, // is never edited
-      name: name || "", // controled components requires initialized values and string is requi
+      name: name || "", // controled components requires initialized values and to be passed initially
       surname: surname || "",
       team: team || "",
       startDate: startDate || null, // MUI: Daypicker accepts only null as default value
@@ -75,7 +75,7 @@ function EmployeeForm({
   return (
     <div>
       <Dialog open={isOpen} fullWidth maxWidth="md">
-        <DialogTitle>Add Employee</DialogTitle>
+        <DialogTitle>{mode === 'add' ? "Add Employee" : "Edit Employee"}</DialogTitle>
         <DialogContent>
           <form onSubmit={formik.handleSubmit}>
             <Stack direction="column" spacing='1rem'>
